@@ -4,13 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrierung</title>
+
+    <style>
+        
+        h1{
+            justify-content: center;
+            display: flex;
+        }
+        .regi{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            height: 150px;
+            width: auto;
+            background: rgb(168, 99, 99);
+            border: solid rgb(145, 58, 58) 3px;
+        }
+        #registrationForm{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            border-radius: 8px;
+            box-shadow: 5px 5px 15px rgb(46, 39, 39);
+        }
+        button:hover{
+            color:blue;
+            text-decoration: underline;
+        }
+
+    </style>
+
 </head>
 <body>
-    <form id="registrationForm">
+    <h1>Das ist die Registrierung!</h1>
+    <div class="regi">
+    <form id="registrationForm"> 
         <input type="text" id="username" placeholder="Benutzername" required />
         <input type="password" id="password" placeholder="Passwort" required />
         <input type="email" id="email" placeholder="E-Mail" required />
         <button type="submit">Registrieren</button>
     </form>
+    </div>
 </body>
 </html>
