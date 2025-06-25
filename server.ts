@@ -1,56 +1,61 @@
-import express from "express";
-import bodyParser from "body-parser";
+import express, { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 
 const app = express();
 const PORT = 3000;
 
-interface User {
-  username: string;
-  password: string;
-  email: string;
-}
+// Pfad zur users.json im gleichen Ordner wie server.ts
+const usersPath = path.resolve(__dirname, "users.json");
 
-const usersPath = path.join(__dirname, "users.json");
+app.use(express.static("public"));
+app.use(express.json());
 
-// Middleware
-app.use(bodyParser.json());
-app.use(express.static("public")); // Damit du deine HTML-Seiten abrufen kannst
-
-// User-Datei lesen
-function readUsers(): User[] {
-  if (!fs.existsSync(usersPath)) return [];
-  const data = fs.readFileSync(usersPath, "utf-8");
-  return JSON.parse(data);
-}
-
-// User-Datei schreiben
-function saveUsers(users: User[]) {
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), "utf-8");
-}
-
-// Registrierung
-app.post("/register", (req, res) => {
-  const { username, password, email } = req.body as User;
+app.post("/register", (req: any, res: any) => {
+  const { username, password, email } = req.body;
 
   if (!username || !password || !email) {
-    return res.status(400).json({ error: "Bitte alle Felder ausfüllen." });
+    return res.status(400).json({ error: "Alle Felder erforderlich" });
   }
 
-  const users = readUsers();
+  // Lade bestehende Benutzer oder leeres Array, wenn Datei fehlt
+  const users = fs.existsSync(usersPath)
+    ? JSON.parse(fs.readFileSync(usersPath, "utf-8"))
+    : [];
 
-  const userExists = users.some(u => u.username === username || u.email === email);
-  if (userExists) {
-    return res.status(400).json({ error: "Benutzername oder E-Mail bereits vergeben." });
+  // Benutzername prüfen
+  if (users.some((u: any) => u.username === username)) {
+    return res.status(409).json({ error: "Benutzername bereits vergeben" });
   }
 
+  // Neuen Benutzer speichern
   users.push({ username, password, email });
-  saveUsers(users);
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
 
-  res.status(201).json({ message: "Registrierung erfolgreich!" });
+  return res.status(201).json({ message: "Registrierung erfolgreich!" });
+});
+
+app.post("/login", (req: any, res: any) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Benutzername und Passwort erforderlich" });
+  }
+
+  if (!fs.existsSync(usersPath)) {
+    return res.status(400).json({ error: "Keine Benutzer gefunden" });
+  }
+
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf-8"));
+  const user = users.find((u: any) => u.username === username && u.password === password);
+
+  if (!user) {
+    return res.status(401).json({ error: "Ungültiger Benutzername oder Passwort" });
+  }
+
+  return res.status(200).json({ message: "Login erfolgreich" });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
+  console.log(`Server läuft unter http://localhost:${PORT}`);
 });
