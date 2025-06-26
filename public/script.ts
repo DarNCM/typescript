@@ -11,8 +11,6 @@ Falls nicht, erscheint ein Alert "Die Daten stimmen nicht überein".
 Nach Erfolgreichem Login, wird man auf eine "Sie wurden Erfolgreich angemeldet"-Seite weitergeleitet.
 */
 
-import { response } from "express";
-
 //Here we declare a variable that with "document.getElementById" and ("ID-Name") that we
 //want it to get a Document Type, with the specific ID of the document and save it as HTMLFormElement OR | null
 const registrierung = document.getElementById(
