@@ -29,7 +29,37 @@ else {
 }
   const users = req.body;
   fs.writeFileSync(dataPath, JSON.stringify(users, null, 2), "utf-8"); 
+
+const newUser = {username, password, email};
+
+// 1. Load existing users from file (or start with an empty array)
+let nUsers = [];
+if (fs.existsSync(dataPath)) {
+  const fileData = fs.readFileSync(dataPath, "utf-8");
+  try {
+    nUsers = JSON.parse(fileData);
+    if (!Array.isArray(users)) {
+      nUsers = []; // If somehow it's not an array
+    }
+  } catch (err) {
+    console.error("Fehler beim Parsen von users.json:", err);
+    nUsers = []; // On JSON error, start fresh
+  }
+}
+  // 2. Add (push) new user to the array
+nUsers.push(newUser);
+
+// 3. Save the updated user list back to the file
+fs.writeFileSync(dataPath, JSON.stringify(nUsers, null, 2), "utf-8");
+
 });
+
+
+
+
+
+
+
   app.listen(PORT, () => {
   console.log(`Server läuft auf http://localhost:${PORT}`);
 });
