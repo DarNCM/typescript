@@ -105,3 +105,31 @@ let strings = ["Hare", "Krishna", "Hare", "Krishna",
   "Krishna", "Krishna", "Hare", "Hare", ":-O"
 ];
 
+let variable = username(vorname);
+
+if (variable == " "){
+  console.log("Hallo " + variable);
+} else { 
+  console.log("Hallo, unbekannte Person");
+}
+
+for (let i = 0; i < 10; i++){
+  console.log(i);
+  if (i == 5){
+    break;
+  }
+  if (i == 3){
+    continue;
+  }
+  console.log(i);
+}
+// Erklärung: Das ist eine for-Schleife, die von 0 bis 9 läuft.
+// Wenn i == 5, dann wird die Schleife abgebrochen.
+// Wenn i == 3, dann wird die Schleife übersprungen.
+// Wenn i == 0, dann wird die Schleife gestartet.
+// Wenn i == 1, dann wird die Schleife gestartet.
+// Wenn i == 2, dann wird die Schleife gestartet.
+// Wenn i == 3, dann wird die Schleife übersprungen.
+// Wenn i == 4, dann wird die Schleife gestartet.
+// Wenn i == 5, dann wird die Schleife abgebrochen.
+
